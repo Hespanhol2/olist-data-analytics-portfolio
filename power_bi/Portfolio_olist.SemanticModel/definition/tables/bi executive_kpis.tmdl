@@ -1,0 +1,106 @@
+table 'bi executive_kpis'
+	lineageTag: 4831e224-add1-487b-85f9-70ed54638756
+
+	measure 'GMV 2018' =
+			
+			CALCULATE (
+			    MAX ( 'bi executive_kpis'[value_2018] ),
+			    'bi executive_kpis'[metric] = "GMV"
+			)
+		formatString: R$ #,##0.00
+		lineageTag: 520b0101-cb9b-4696-a374-645126efbf0d
+
+	measure 'Pedidos 2018' =
+			
+			CALCULATE (
+			    MAX ( 'bi executive_kpis'[value_2018] ),
+			    'bi executive_kpis'[metric] = "Pedidos"
+			)
+		formatString: #,##0
+		lineageTag: 9c7e4d1f-2cad-4d16-a3b1-8165d607d559
+
+	measure 'Entrega no Prazo 2018' =
+			
+			CALCULATE (
+			    MAX ( 'bi executive_kpis'[value_2018] ),
+			    'bi executive_kpis'[metric] = "Entrega no prazo"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: b7ae2b92-0466-4d05-a981-4c980a9ff7b6
+
+	measure 'Crescimento GMV' =
+			
+			CALCULATE (
+			    MAX ( 'bi executive_kpis'[variation] ),
+			    'bi executive_kpis'[metric] = "GMV"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 6c6b2374-efae-4193-a181-fe89ef245e06
+
+	measure 'Clientes 2018' =
+			
+			CALCULATE (
+			    MAX ( 'bi executive_kpis'[value_2018] ),
+			    'bi executive_kpis'[metric] = "Clientes"
+			)
+		formatString: #,##0
+		lineageTag: 18807c41-75f2-4428-b9fa-560f6cceea09
+
+	measure 'Ticket Médio 2018' =
+			
+			CALCULATE (
+			    MAX ( 'bi executive_kpis'[value_2018] ),
+			    'bi executive_kpis'[metric] = "Ticket médio"
+			)
+		formatString: R$ #,##0.00
+		lineageTag: f8305d23-a34a-44a0-8f80-f0943193231e
+
+	column metric
+		dataType: string
+		lineageTag: 82c635d7-3689-4329-830a-c2c69815f359
+		summarizeBy: none
+		sourceColumn: metric
+
+		annotation SummarizationSetBy = Automatic
+
+	column value_2017
+		dataType: double
+		lineageTag: a1126b3b-2de9-49e7-8fb2-2d959d47d00a
+		summarizeBy: sum
+		sourceColumn: value_2017
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column value_2018
+		dataType: double
+		lineageTag: bf0e9e54-00ff-4cc1-bd6e-4a55cfe9f626
+		summarizeBy: sum
+		sourceColumn: value_2018
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column variation
+		dataType: double
+		lineageTag: 40a7534e-2a13-4df6-8706-c064af8b6889
+		summarizeBy: sum
+		sourceColumn: variation
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'bi executive_kpis' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_executive_kpis = Fonte{[Schema="bi",Item="executive_kpis"]}[Data]
+				in
+				    bi_executive_kpis
+
+	annotation PBI_ResultType = Table
+

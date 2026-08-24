@@ -1,0 +1,28 @@
+# Base pública: baixar novamente pelo link do Kaggle.
+olist_brazilian_ecommerce.zip
+data/raw/*.csv
+
+# Artefatos reproduzíveis gerados pelos scripts.
+data/olist.db
+data/processed/*.csv
+data/processed/*.json
+.build/
+
+# Arquivos temporários.
+__pycache__/
+*.pyc
+*.inspect.ndjson
+~$*.xlsx
+~$*.pptx
+.env
+.venv/
+
+# O projeto Power BI versionável está em PBIP/PBIR. O PBIX local é binário e pode conter cache de dados.
+power_bi/*.pbix
+power_bi/**/.pbi/
+
+# Volume local opcional do PostgreSQL.
+postgres_data/
+
+# Materiais pessoais de preparação para a entrevista.
+docs/

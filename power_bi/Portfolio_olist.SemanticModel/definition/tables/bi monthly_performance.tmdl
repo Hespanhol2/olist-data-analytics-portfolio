@@ -1,0 +1,138 @@
+table 'bi monthly_performance'
+	lineageTag: e1d3e832-8b7a-463d-ab99-61bb4b518a84
+
+	column purchase_month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ceb119be-6635-4924-a94b-05ad7aca77e6
+		summarizeBy: none
+		sourceColumn: purchase_month
+
+		variation Variation
+			isDefault
+			relationship: 27de9782-78a4-4527-80f7-5e7dd1ad5aab
+			defaultHierarchy: LocalDateTable_bc14fe22-f449-4e3b-9d42-e583f932fc93.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column gmv
+		dataType: double
+		lineageTag: 10c7dc82-791f-4ca7-b856-dbcfde69fcea
+		summarizeBy: sum
+		sourceColumn: gmv
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column orders
+		dataType: int64
+		formatString: 0
+		lineageTag: 26010a9c-cd33-43af-bba0-adb31091201e
+		summarizeBy: sum
+		sourceColumn: orders
+
+		annotation SummarizationSetBy = Automatic
+
+	column customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e4b987c-bd36-4680-baa5-5cc758dd83fd
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_order_value
+		dataType: double
+		lineageTag: f07ee5eb-a4ce-4ea1-a3a6-7ac16e910fbc
+		summarizeBy: sum
+		sourceColumn: average_order_value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column items_per_order
+		dataType: double
+		lineageTag: 7491dec7-d563-4d3e-86a1-ede15ec74c92
+		summarizeBy: sum
+		sourceColumn: items_per_order
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column on_time_rate
+		dataType: double
+		lineageTag: 4c92fd7e-035c-421e-9efd-21fa49362929
+		summarizeBy: sum
+		sourceColumn: on_time_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_review
+		dataType: double
+		lineageTag: 19f779ca-6338-4c29-825c-195881346ab8
+		summarizeBy: sum
+		sourceColumn: average_review
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column repeat_order_share
+		dataType: double
+		lineageTag: ca20c5ce-d318-4766-8634-f59ab4bb6d4b
+		summarizeBy: sum
+		sourceColumn: repeat_order_share
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gmv_mom
+		dataType: double
+		lineageTag: cb476035-47cb-4209-835a-ed42b3fcc197
+		summarizeBy: sum
+		sourceColumn: gmv_mom
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column orders_mom
+		dataType: double
+		lineageTag: 5217ab9a-9226-4a39-98b1-4fe8da4a096f
+		summarizeBy: sum
+		sourceColumn: orders_mom
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column aov_mom
+		dataType: double
+		lineageTag: b89c6a86-daf4-49fd-b752-18fbf9eb5794
+		summarizeBy: sum
+		sourceColumn: aov_mom
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'bi monthly_performance' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_monthly_performance = Fonte{[Schema="bi",Item="monthly_performance"]}[Data]
+				in
+				    bi_monthly_performance
+
+	annotation PBI_ResultType = Table
+

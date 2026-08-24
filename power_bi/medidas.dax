@@ -1,0 +1,51 @@
+-- Tabela: bi.fact_orders
+GMV =
+SUM ( fact_orders[gmv] )
+
+Pedidos =
+DISTINCTCOUNT ( fact_orders[order_id] )
+
+Clientes =
+DISTINCTCOUNT ( fact_orders[customer_unique_id] )
+
+Ticket Médio =
+DIVIDE ( [GMV], [Pedidos] )
+
+Itens por Pedido =
+DIVIDE ( SUM ( fact_orders[item_count] ), [Pedidos] )
+
+Entrega no Prazo % =
+AVERAGE ( fact_orders[on_time_flag] )
+
+Nota Média =
+AVERAGE ( fact_orders[review_score] )
+
+GMV Ano Anterior =
+CALCULATE ( [GMV], SAMEPERIODLASTYEAR ( dim_date[date] ) )
+
+Crescimento GMV YoY % =
+DIVIDE ( [GMV] - [GMV Ano Anterior], [GMV Ano Anterior] )
+
+Pedidos Ano Anterior =
+CALCULATE ( [Pedidos], SAMEPERIODLASTYEAR ( dim_date[date] ) )
+
+Crescimento Pedidos YoY % =
+DIVIDE ( [Pedidos] - [Pedidos Ano Anterior], [Pedidos Ano Anterior] )
+
+Clientes Recorrentes =
+COUNTROWS (
+    FILTER (
+        VALUES ( dim_customer[customer_unique_id] ),
+        CALCULATE ( [Pedidos] ) >= 2
+    )
+)
+
+Taxa de Recorrência % =
+DIVIDE ( [Clientes Recorrentes], [Clientes] )
+
+Pedidos com Atraso =
+CALCULATE ( [Pedidos], fact_orders[on_time_flag] = 0 )
+
+Taxa de Atraso % =
+DIVIDE ( [Pedidos com Atraso], [Pedidos] )
+

@@ -1,0 +1,72 @@
+table 'bi category_growth'
+	lineageTag: 3f62cfe9-27ba-4291-8a97-c27e2d4eef8e
+
+	column product_category
+		dataType: string
+		lineageTag: 580eb262-9a12-4386-bba3-9bdcbe2bfb8b
+		summarizeBy: none
+		sourceColumn: product_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column gmv_2017
+		dataType: double
+		lineageTag: f2af045d-c2fa-43ef-b0da-513f79636468
+		summarizeBy: sum
+		sourceColumn: gmv_2017
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gmv_2018
+		dataType: double
+		lineageTag: 9d2eed39-2449-4267-acb2-7f83556e7d53
+		summarizeBy: sum
+		sourceColumn: gmv_2018
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column absolute_growth
+		dataType: double
+		lineageTag: a847bf16-d1db-4df9-9ac7-efbc146ae3c2
+		summarizeBy: sum
+		sourceColumn: absolute_growth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column growth_rate
+		dataType: double
+		lineageTag: 50dd23e9-9358-488d-9764-34a866f6e0db
+		summarizeBy: sum
+		sourceColumn: growth_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column growth_contribution
+		dataType: double
+		lineageTag: cb820dea-fbd1-4081-8e98-1b5a15e0f66d
+		summarizeBy: sum
+		sourceColumn: growth_contribution
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'bi category_growth' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_category_growth = Fonte{[Schema="bi",Item="category_growth"]}[Data]
+				in
+				    bi_category_growth
+
+	annotation PBI_ResultType = Table
+

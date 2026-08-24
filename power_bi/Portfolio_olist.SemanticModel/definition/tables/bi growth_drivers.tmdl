@@ -1,0 +1,42 @@
+table 'bi growth_drivers'
+	lineageTag: 9b2beabe-0e5a-47d0-86f1-fe9c91a57161
+
+	column driver
+		dataType: string
+		lineageTag: 97b55a2e-f00e-4fd5-997b-d7be122a5a0d
+		summarizeBy: none
+		sourceColumn: driver
+
+		annotation SummarizationSetBy = Automatic
+
+	column impact
+		dataType: double
+		lineageTag: 04e35213-1ed2-4318-aae2-6f35430545b0
+		summarizeBy: sum
+		sourceColumn: impact
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column contribution_to_growth
+		dataType: double
+		lineageTag: d7ac4996-db3a-4214-95b2-08b7ae1feeef
+		summarizeBy: sum
+		sourceColumn: contribution_to_growth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'bi growth_drivers' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_growth_drivers = Fonte{[Schema="bi",Item="growth_drivers"]}[Data]
+				in
+				    bi_growth_drivers
+
+	annotation PBI_ResultType = Table
+

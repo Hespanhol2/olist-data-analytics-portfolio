@@ -1,0 +1,26 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["bi executive_kpis","bi monthly_performance","bi growth_drivers","bi category_growth","bi customer_segment_summary","bi delivery_experience"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'bi executive_kpis'
+ref table 'bi monthly_performance'
+ref table DateTableTemplate_e680bf19-1345-4b07-9aa8-e9555de3f656
+ref table LocalDateTable_bc14fe22-f449-4e3b-9d42-e583f932fc93
+ref table 'bi growth_drivers'
+ref table 'bi category_growth'
+ref table 'bi customer_segment_summary'
+ref table 'bi delivery_experience'
+
+ref cultureInfo pt-BR
+

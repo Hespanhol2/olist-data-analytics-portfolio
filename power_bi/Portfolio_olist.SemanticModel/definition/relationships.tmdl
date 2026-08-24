@@ -1,0 +1,5 @@
+relationship 27de9782-78a4-4527-80f7-5e7dd1ad5aab
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'bi monthly_performance'.purchase_month
+	toColumn: LocalDateTable_bc14fe22-f449-4e3b-9d42-e583f932fc93.Date
+

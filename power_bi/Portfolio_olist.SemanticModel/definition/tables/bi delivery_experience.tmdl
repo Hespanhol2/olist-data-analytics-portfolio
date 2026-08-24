@@ -1,0 +1,99 @@
+table 'bi delivery_experience'
+	lineageTag: 7f0628fb-7563-41c9-894e-bbde018a4c43
+
+	measure 'Nota Média - Entrega Antecipada' =
+			
+			CALCULATE (
+			    MAX ( 'bi delivery_experience'[average_review] ),
+			    'bi delivery_experience'[delivery_band] = "3+ dias antes do prazo"
+			)
+		formatString: 0.00
+		lineageTag: 1d276db3-4c79-4c94-96be-5678c7309b7d
+
+	measure 'Nota Média - Atraso 8+' =
+			
+			CALCULATE (
+			    MAX ( 'bi delivery_experience'[average_review] ),
+			    'bi delivery_experience'[delivery_band] = "8+ dias de atraso"
+			)
+		formatString: 0.00
+		lineageTag: 7df81ee7-d2d7-4c3e-984a-cc7f6e36af16
+
+	measure 'Avaliações Baixas - Atraso 8+' =
+			
+			CALCULATE (
+			    MAX ( 'bi delivery_experience'[low_review_rate] ),
+			    'bi delivery_experience'[delivery_band] = "8+ dias de atraso"
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e4b0aa6a-118e-44ac-bd63-c1f657e5b6b0
+
+	measure 'Queda na Nota por Atraso' = [Nota Média - Entrega Antecipada] - [Nota Média - Atraso 8+]
+		formatString: 0.00
+		lineageTag: e4a82b52-975d-4ec8-9de1-22a923bd221d
+
+	column delivery_band
+		dataType: string
+		lineageTag: 61fa4435-b4b5-450b-89fd-c8beb22ca4e4
+		summarizeBy: none
+		sourceColumn: delivery_band
+		sortByColumn: band_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column band_order
+		dataType: int64
+		formatString: 0
+		lineageTag: 86252edb-9dd1-4764-bb25-6e5619cd6cd1
+		summarizeBy: sum
+		sourceColumn: band_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column orders
+		dataType: int64
+		formatString: 0
+		lineageTag: a4c6367c-1e32-4ac2-b29a-5a298426e796
+		summarizeBy: sum
+		sourceColumn: orders
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_review
+		dataType: double
+		formatString: 0.00
+		lineageTag: 748a6abd-f768-4c53-a9b1-420c1fd9293f
+		summarizeBy: sum
+		sourceColumn: average_review
+
+		annotation SummarizationSetBy = Automatic
+
+	column low_review_rate
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: d46257f3-5cda-44f5-bb0b-959da55d4d99
+		summarizeBy: sum
+		sourceColumn: low_review_rate
+
+		annotation SummarizationSetBy = Automatic
+
+	column gmv
+		dataType: double
+		formatString: R$ #,##0.00
+		lineageTag: 3e5502df-997b-4f1c-bfb5-8bfb06dfdcd8
+		summarizeBy: sum
+		sourceColumn: gmv
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bi delivery_experience' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_delivery_experience = Fonte{[Schema="bi",Item="delivery_experience"]}[Data]
+				in
+				    bi_delivery_experience
+
+	annotation PBI_ResultType = Table
+

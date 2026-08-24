@@ -1,0 +1,112 @@
+table 'bi customer_segment_summary'
+	lineageTag: b4918b69-b097-4c54-add4-403ab6f7df9e
+
+	measure 'Clientes Totais' = SUM ( 'bi customer_segment_summary'[customers] )
+		formatString: #,##0
+		lineageTag: 18daebf4-e696-46bf-b1e9-2e42859e6fe9
+
+	measure 'Clientes Recentes de Alto Valor' =
+			
+			CALCULATE (
+			    [Clientes Totais],
+			    'bi customer_segment_summary'[segment] = "Recentes de alto valor"
+			)
+		formatString: #,##0
+		lineageTag: 55910145-51ba-4ba8-ab62-e61a60860c3c
+
+	measure 'Taxa de Clientes Recorrentes' =
+			
+			DIVIDE (
+			    CALCULATE (
+			        [Clientes Totais],
+			        'bi customer_segment_summary'[segment]
+			            IN { "Recorrentes ativos", "Recorrentes em risco" }
+			    ),
+			    [Clientes Totais]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e90814ac-48de-4dd3-aed7-3b96d2e8b468
+
+	measure 'GMV por Cliente' =
+			DIVIDE (
+			    SUM ( 'bi customer_segment_summary'[total_gmv] ),
+			    [Clientes Totais]
+			)
+		formatString: R$ #,##0.00
+		lineageTag: a4eb5c26-9a4f-4851-a38d-7edfac31c237
+
+	column segment
+		dataType: string
+		lineageTag: d2fce174-c7d4-415c-8c8f-293c6c36c24c
+		summarizeBy: none
+		sourceColumn: segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 0bf17e6a-4651-4ce0-a581-e6b74988f99d
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_recency_days
+		dataType: double
+		lineageTag: 4bb397c0-29fc-45ee-baf5-f95028b85ef2
+		summarizeBy: sum
+		sourceColumn: average_recency_days
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_frequency
+		dataType: double
+		lineageTag: fc4bd4b3-39e9-43c0-9209-9c9b3b997f81
+		summarizeBy: sum
+		sourceColumn: average_frequency
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_monetary
+		dataType: double
+		formatString: R$ #,##0.00
+		lineageTag: a488cf85-46a0-43df-a3d9-ae0e7b58af7a
+		summarizeBy: sum
+		sourceColumn: average_monetary
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_gmv
+		dataType: double
+		formatString: R$ #,##0.00
+		lineageTag: dc0bfc65-f3ab-4ba8-a577-8c49c9a7f45d
+		summarizeBy: sum
+		sourceColumn: total_gmv
+
+		annotation SummarizationSetBy = Automatic
+
+	column average_review
+		dataType: double
+		formatString: 0.00
+		lineageTag: 2854ae74-7df7-487b-b766-df7bea02e63a
+		summarizeBy: sum
+		sourceColumn: average_review
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bi customer_segment_summary' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_customer_segment_summary = Fonte{[Schema="bi",Item="customer_segment_summary"]}[Data]
+				in
+				    bi_customer_segment_summary
+
+	annotation PBI_ResultType = Table
+
