@@ -1,0 +1,97 @@
+table 'bi cohort_retention'
+	lineageTag: c8361702-6b1f-46ea-bfc4-d93dd25007ec
+
+	measure 'Retenção Ponderada' =
+			DIVIDE (
+			    SUM ( 'bi cohort_retention'[active_customers] ),
+			    SUM ( 'bi cohort_retention'[cohort_size] )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 73120b68-5d06-4094-af72-dc2eea5211a8
+
+	measure 'Retenção M+1' =
+			CALCULATE (
+			    [Retenção Ponderada],
+			    'bi cohort_retention'[months_since] = 1
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5349af99-a414-481a-9b61-f38ad43932a1
+
+	measure 'Retenção Pós-Aquisição' =
+			IF (
+			    SELECTEDVALUE ( 'bi cohort_retention'[months_since] ) = 0,
+			    BLANK (),
+			    [Retenção Ponderada]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a194fd98-06f4-4b8c-a7ed-75fdc5c1fd16
+
+	column cohort_month
+		dataType: dateTime
+		formatString: MMM/yyyy
+		lineageTag: 69d877b4-cd44-49f8-93a2-e85ac5668f12
+		summarizeBy: none
+		sourceColumn: cohort_month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column activity_month
+		dataType: dateTime
+		formatString: MMM/yyyy
+		lineageTag: bfa25bb9-5958-44df-874c-91a3cc01d282
+		summarizeBy: none
+		sourceColumn: activity_month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column months_since
+		dataType: int64
+		formatString: 0
+		lineageTag: af450eb0-25a6-4c43-a219-c7fab61a0284
+		summarizeBy: none
+		sourceColumn: months_since
+
+		annotation SummarizationSetBy = Automatic
+
+	column active_customers
+		dataType: int64
+		formatString: #,##0
+		lineageTag: e2bab2b8-940a-490c-8cc9-e0ec9a8e8853
+		summarizeBy: sum
+		sourceColumn: active_customers
+
+		annotation SummarizationSetBy = Automatic
+
+	column cohort_size
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 57baf928-6129-4313-a89c-74c3af64fe9f
+		summarizeBy: sum
+		sourceColumn: cohort_size
+
+		annotation SummarizationSetBy = Automatic
+
+	column retention_rate
+		dataType: double
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: dc292a29-381f-4255-917c-2946fe70da5d
+		summarizeBy: average
+		sourceColumn: retention_rate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bi cohort_retention' = m
+		mode: import
+		source =
+				let
+				    Fonte = PostgreSQL.Database("localhost:55432", "olist_analytics"),
+				    bi_cohort_retention = Fonte{[Schema="bi",Item="cohort_retention"]}[Data]
+				in
+				    bi_cohort_retention
+
+	annotation PBI_ResultType = Table
+

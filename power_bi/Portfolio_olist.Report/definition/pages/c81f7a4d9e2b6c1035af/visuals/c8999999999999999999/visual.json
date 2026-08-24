@@ -1,0 +1,90 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "c8999999999999999999",
+  "position": {
+    "x": 80,
+    "y": 350,
+    "z": 5000,
+    "height": 590,
+    "width": 860,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi cohort_retention"
+                    }
+                  },
+                  "Property": "months_since"
+                }
+              },
+              "queryRef": "bi cohort_retention.months_since",
+              "nativeQueryRef": "months_since",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "bi cohort_retention"
+                    }
+                  },
+                  "Property": "Retenção Pós-Aquisição"
+                }
+              },
+              "queryRef": "bi cohort_retention.Retenção Pós-Aquisição",
+              "nativeQueryRef": "Retenção Pós-Aquisição"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "bi cohort_retention"
+                  }
+                },
+                "Property": "months_since"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Curva de retenção após a primeira compra'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

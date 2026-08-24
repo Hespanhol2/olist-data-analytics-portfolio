@@ -35,6 +35,23 @@ table 'bi customer_segment_summary'
 		formatString: R$ #,##0.00
 		lineageTag: a4eb5c26-9a4f-4851-a38d-7edfac31c237
 
+	measure 'Clientes em Risco ou Inativos' =
+			CALCULATE (
+			    [Clientes Totais],
+			    'bi customer_segment_summary'[segment]
+			        IN { "Recorrentes em risco", "Alto valor inativos", "Inativos de baixo valor" }
+			)
+		formatString: #,##0
+		lineageTag: 1ab57931-216a-49cc-9812-e1272dfed44d
+
+	measure 'Taxa de Inatividade (proxy churn)' = DIVIDE ( [Clientes em Risco ou Inativos], [Clientes Totais] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 9491a8b1-28f3-4f79-94e4-ea2f16594fd2
+
+	measure 'Valor Histórico Médio (proxy LTV)' = [GMV por Cliente]
+		formatString: R$ #,##0.00
+		lineageTag: fd4b0972-a9a7-4a87-a4ba-7ddbfeae14b5
+
 	column segment
 		dataType: string
 		lineageTag: d2fce174-c7d4-415c-8c8f-293c6c36c24c

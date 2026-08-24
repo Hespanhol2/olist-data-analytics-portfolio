@@ -67,7 +67,8 @@ Copie as medidas de `power_bi/medidas.dax`. Estrutura sugerida:
 1. **Visão executiva:** GMV, pedidos, clientes, ticket, pontualidade e nota.
 2. **Drivers de crescimento:** volume versus ticket, categorias e estados.
 3. **Clientes e CRM:** recorrência, segmentos e coortes.
-4. **Experiência:** atraso, nota e taxa de avaliações baixas.
+4. **Retenção e valor:** retenção M+1, curva pós-aquisição, churn proxy e LTV histórico proxy.
+5. **Experiência:** atraso, nota e taxa de avaliações baixas.
 
 ## 6. Power Query opcional
 

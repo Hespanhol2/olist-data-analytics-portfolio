@@ -127,7 +127,20 @@ Para este volume, o modo **Importar** é o mais apropriado. DirectQuery está di
 
 1. **Visão executiva:** GMV, pedidos, clientes, ticket, pontualidade e nota.
 2. **Clientes e CRM:** recorrência, segmentos e oportunidade de segunda compra.
-3. **Experiência de entrega:** atraso, avaliação e taxa de notas baixas.
+3. **Retenção e valor do cliente:** recorrência, retenção por coorte, churn proxy e LTV histórico proxy.
+4. **Experiência de entrega:** atraso, avaliação e taxa de notas baixas.
+
+## Ciclo de vida do cliente
+
+Os conceitos de CRM são aplicados com definições compatíveis com as limitações da base:
+
+- **Recorrência:** clientes com dois ou mais pedidos no histórico, identificados por `customer_unique_id` (**3,00%**).
+- **Retenção M+1:** clientes que voltaram a comprar no mês seguinte à primeira compra, ponderados pelo tamanho das coortes (**0,48%**).
+- **Coorte:** agrupamento pelo mês da primeira compra, acompanhado por `months_since`.
+- **Churn proxy:** clientes há mais de 90 dias sem comprar (**80,64%**). Não representa cancelamento contratual.
+- **LTV histórico proxy:** GMV acumulado dividido pelo total de clientes (**R$ 165,17**). Não é um LTV preditivo e não incorpora margem.
+
+Essa nomenclatura evita tratar inatividade como churn confirmado ou GMV histórico como valor econômico futuro.
 
 ## Recomendação de CRM
 

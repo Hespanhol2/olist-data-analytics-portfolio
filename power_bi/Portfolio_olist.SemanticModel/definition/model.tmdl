@@ -9,7 +9,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["bi executive_kpis","bi monthly_performance","bi growth_drivers","bi category_growth","bi customer_segment_summary","bi delivery_experience"]
+annotation PBI_QueryOrder = ["bi executive_kpis","bi monthly_performance","bi growth_drivers","bi category_growth","bi customer_segment_summary","bi cohort_retention","bi delivery_experience"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -21,6 +21,7 @@ ref table 'bi growth_drivers'
 ref table 'bi category_growth'
 ref table 'bi customer_segment_summary'
 ref table 'bi delivery_experience'
+ref table 'bi cohort_retention'
 
 ref cultureInfo pt-BR
 
